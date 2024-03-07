@@ -1,0 +1,91 @@
+#openrouter-roulette-container .inline-drawer-content{
+    font-size: small;
+}
+
+.openrouter-roulette-spaceBetween {
+    display: flex;
+    justify-content: space-between;
+}
+
+.openrouter-roulette-inline {
+    display: inline-block;
+}
+
+#openrouter-roulette-container .inline-drawer-content {
+    padding: 0.5em 0;
+}
+
+.openrouter-roulette-centerVertically {
+    display: flex;
+    align-items: center;
+}
+
+.openrouter-roulette-row {
+    display: flex;
+}
+
+.openrouter-roulette-col {
+    flex: 1;
+}
+
+#openrouter-roulette-models {
+    border-collapse:separate;
+    border-spacing: 0 1em;
+
+    background-color: var(--black30a);
+    border: 1px solid var(--black30a);
+    border-radius: 5px;
+    padding: 0 7px;
+}
+
+#openrouter-roulette-models tbody td input[type="range"] {
+    width: 100px;
+}
+
+#openrouter-roulette-models tbody td input {
+    width: 40px;
+    background-color: var(--black30a);
+    border: 1px solid var(--black30a);
+}
+
+#openrouter-roulette-models tbody td:first-child {
+    min-width:120px;
+}
+
+.openrouter-roulette-textAlignCenter {
+    text-align: center;
+}
+
+.openrouter-roulette-textAlignRight {
+    text-align: right;
+}
+
+.openrouter-roulette-selfAlignRight {
+    margin: auto 0 auto auto;
+}
+
+.openrouter-roulette-probability-range {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    writing-mode: vertical-lr;
+    font-size: smaller;
+    width: 200px;
+}
+
+.openrouter-roulette-models option {
+    padding: 0;
+}
+
+#openrouter-roulette-sendbut-overlay {
+    position: absolute;
+    background-color: transparent;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 9999;
+    border: 0;
+}
+
+

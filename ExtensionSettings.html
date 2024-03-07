@@ -1,10 +1,34 @@
-<div id="openrouter-roulette-settings">
-    <div class="inline-drawer">
+    <div class="inline-drawer wide100p" id="openrouter-roulette-container">
         <div class="inline-drawer-toggle inline-drawer-header">
-
+            <strong>Open Router Roulette</strong>
+            <div class="inline-drawer-icon fa-solid down fa-circle-chevron-down"></div>
         </div>
         <div class="inline-drawer-content" style="display: none;">
-
+            <div class="openrouter-roulette-spaceBetween m-b-1 padding5">
+                <div id="openrouter-roulette--characterStatus" class="openrouter-roulette-centerVertically">
+                    <span>Settings: &nbsp;</span>
+                    <span id="openrouter-roulette-characterSelected">Default</span>
+                </div>
+                <div>
+                    <button id="openrouter-roulette-addModel" class="menu_button menu_button_icon openrouter-roulette-inline">
+                        <i class="fa-xs fa-solid fa-add"></i>
+                        Add Model
+                    </button>
+                    <button id="openrouter-roulette-saveToCharacter" class="menu_button menu_button_icon openrouter-roulette-inline">
+                        <i class="fa-xs fa-solid fa-save"></i>
+                        Save
+                    </button>
+                </div>
+            </div>
+            <table id="openrouter-roulette-models" class="wide100p">
+                <thead>
+                    <tr>
+                        <th>Preset</th>
+                        <th colspan="3" class="textAlignCenter">Probability</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot></tfoot>
+            </table>
         </div>
     </div>
-</div>
