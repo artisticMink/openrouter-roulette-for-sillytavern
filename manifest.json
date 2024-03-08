@@ -1,5 +1,5 @@
 {
-  "display_name":"Randomly selects different OpeNRouter models for the next request.",
+  "display_name":"OpenRouter Roulette for SillyTavern",
   "loading_order": 100,
   "requires": [],
   "optional": [],
