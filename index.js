@@ -30,7 +30,7 @@ let extensionContainer = getDomElement(extensionContainerIdentifier);
 
 // Global references for send-button and send-button overlay
 let sendButton = null;
-let fakeButton = null;
+let randomizedSendButton = null;
 
 /**
  * Populate extension settings
@@ -330,10 +330,7 @@ function switchOpenRouterModel(name) {
  *
  * @return {void}
  */
-function beforeSendMessage(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
+function sendMessage(event) {
     const presetSelect = getDomElement('settings_preset_openai');
     const model = chooseModel(extensionSettings.models);
 
@@ -350,16 +347,6 @@ function beforeSendMessage(event) {
 
         sleep(100).then(() => sendButton.dispatchEvent(new Event('click')));
     }
-}
-
-/**
- * Retrieves the name of a chatcompletion preset given its index.
- *
- * @param {number} presetIndex - The index of the preset.
- * @returns {string} - The name of the preset, or null if the preset is not found.
- */
-function getPresetName(presetIndex) {
-    return document.querySelector(`#settings_preset_openai option[value="${presetIndex}"]`)?.text;
 }
 
 const swapSettingsSourceHandle = () => swapSettingsSource(this_chid);
@@ -385,13 +372,12 @@ async function loadExtension() {
 
     eventSource.on(event_types.CHAT_CHANGED, swapSettingsSourceHandle);
 
-    // Put an overlay over the send button to capture any click events
     sendButton = getDomElement('send_but');
-    sendButton.style.position = 'relative';
 
-    fakeButton = createDomElement('button', '', { id: 'openrouter-roulette-sendbut-overlay' });
-    fakeButton.addEventListener('click', beforeSendMessage);
-    sendButton.append(fakeButton);
+    const sendForm = getDomElement('rightSendForm');
+    randomizedSendButton = createDomElement('button', '', { id: 'openrouter-roulette-send', class: 'fa-solid fa-dice-three' });
+    randomizedSendButton.addEventListener('click', sendMessage);
+    sendForm.append(randomizedSendButton);
 
     if (this_chid) swapSettingsSource(this_chid);
     await updateModelList();
@@ -406,8 +392,8 @@ async function loadExtension() {
 function unloadExtension() {
     extensionContainer.querySelector('#openrouter-roulette-container').remove();
     eventSource.removeListener(event_types.CHAT_CHANGED, swapSettingsSourceHandle);
-    fakeButton.remove();
-    fakeButton = null;
+    randomizedSendButton.remove();
+    randomizedSendButton = null;
     sendButton = null;
 }
 
