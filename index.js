@@ -16,6 +16,7 @@ import { uuidv4 } from '../../../utils.js';
 const extensionName = 'openrouter-roulette-for-sillytavern';
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const defaultSettings = {
+    useOnEnter: true,
     models: [],
     characters: {},
 };
@@ -30,6 +31,7 @@ let extensionContainer = getDomElement(extensionContainerIdentifier);
 
 // Global references for send-button and send-button overlay
 let sendButton = null;
+let sendTextArea = null;
 let randomizedSendButton = null;
 
 /**
@@ -143,6 +145,22 @@ function addModelToExtensionSettings({ uuid, modelName, preset, probability } = 
             probability,
         },
     );
+}
+
+function toggleUseOnEnter() {
+    extensionSettings.useOnEnter = !extensionSettings.useOnEnter;
+    saveSettingsDebounced();
+    updateUseOnEnterToggle();
+}
+
+function updateUseOnEnterToggle() {
+    const toggle = getDomElement('openrouter-roulette-settings-useOnEnter');
+    toggle.classList.remove('fa-toggle-on', 'fa-toggle-off');
+    if (extensionSettings.useOnEnter) {
+        toggle.classList.add('fa-toggle-on');
+    } else {
+        toggle.classList.add('fa-toggle-off');
+    }
 }
 
 /**
@@ -326,11 +344,9 @@ function switchOpenRouterModel(name) {
  * It prevents the default behavior and stops the event propagation.
  * Triggers the send button manually after model and/or preset are changed.
  *
- * @param {Event} event - The event object triggered when sending the message.
- *
  * @return {void}
  */
-function sendMessage(event) {
+function sendMessage() {
     const presetSelect = getDomElement('settings_preset_openai');
     const openRouterModelSelect = getDomElement('model_openrouter_select');
     const model = chooseModel(extensionSettings.models);
@@ -357,6 +373,14 @@ function sendMessage(event) {
 }
 
 const swapSettingsSourceHandle = () => swapSettingsSource(this_chid);
+const sendTextareaKeydownHandle = (event) =>  {
+    if (extensionSettings.useOnEnter && event.key === 'Enter') {
+        event.preventDefault();
+        event.stopPropagation();
+
+        sendMessage();
+    }
+};
 
 /**
  * Initializes the extension
@@ -376,10 +400,13 @@ async function loadExtension() {
 
     getDomElement('openrouter-roulette-saveToCharacter').addEventListener('click', onSaveToCharacterClick);
     getDomElement('openrouter-roulette-addModel').addEventListener('click', addModel);
+    getDomElement('openrouter-roulette-settings-useOnEnter').addEventListener('click', toggleUseOnEnter);
 
     eventSource.on(event_types.CHAT_CHANGED, swapSettingsSourceHandle);
 
     sendButton = getDomElement('send_but');
+    sendTextArea = getDomElement('send_textarea');
+    sendTextArea.addEventListener('keydown', sendTextareaKeydownHandle, true);
 
     const sendForm = getDomElement('rightSendForm');
     randomizedSendButton = createDomElement('button', '', { id: 'openrouter-roulette-send', class: 'fa-solid fa-dice-three' });
@@ -387,6 +414,8 @@ async function loadExtension() {
     sendForm.append(randomizedSendButton);
 
     if (this_chid) swapSettingsSource(this_chid);
+
+    updateUseOnEnterToggle();
     await updateModelList();
 }
 
@@ -399,6 +428,7 @@ async function loadExtension() {
 function unloadExtension() {
     extensionContainer.querySelector('#openrouter-roulette-container').remove();
     eventSource.removeListener(event_types.CHAT_CHANGED, swapSettingsSourceHandle);
+    sendTextArea.removeListener('keydown', sendTextareaKeydownHandle);
     randomizedSendButton.remove();
     randomizedSendButton = null;
     sendButton = null;

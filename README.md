@@ -17,9 +17,17 @@ The probabilities are weighted, so you can go to values above 100.
 
 Clicking the 'Save' button will copy the current settings to the selected character. These settings will be autoloaded the next time this character is selected. Setting changes are live, it is not necessary to click the save button after every change.
 
+## Send Buttons
+
+If the extension is active, you'll see a die with three dots next to ST's send button. Use this button to use the roulette functionality. 
+
 ## Swiping 
 
 A swipe will re-generate using the last successfully selected model. 
+
+## Textarea
+
+Below the model list, you can select whether pressing enter inside the textarea input should use the roulette or the last selected model.
 
 ## Known Issues
 
