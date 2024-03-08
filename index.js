@@ -197,7 +197,7 @@ async function removeModel(event) {
  */
 async function addModel() {
     const modelName = getDomElement('model_openrouter_select').value;
-    const preset = getDomElement('settings_preset_openai').value;
+    const preset = getDomElement('settings_preset_openai').selectedOptions[0].text;
 
     addModelToExtensionSettings({
         uuid: uuidv4(),
@@ -240,7 +240,7 @@ async function updateModelList() {
 
         // Second row
         const modelRow = createDomElement('tr', '');
-        const presetColumn = createDomElement('td', getPresetName(model.preset) ?? '-');
+        const presetColumn = createDomElement('td', model.preset ?? '-');
 
         const rangeInput = createDomElement(
             'input',
@@ -305,7 +305,7 @@ function chooseModel(modelSelection) {
  */
 function switchPreset(preset) {
     const presetSelect = getDomElement('settings_preset_openai');
-    presetSelect.value = preset;
+    presetSelect.selectedIndex = [...presetSelect.options].findIndex (option => option.text === preset);
     presetSelect.dispatchEvent(new Event('change'));
 }
 
