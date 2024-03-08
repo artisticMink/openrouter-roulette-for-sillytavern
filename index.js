@@ -332,9 +332,14 @@ function switchOpenRouterModel(name) {
  */
 function sendMessage(event) {
     const presetSelect = getDomElement('settings_preset_openai');
+    const openRouterModelSelect = getDomElement('model_openrouter_select');
     const model = chooseModel(extensionSettings.models);
 
-    if (presetSelect.value !== model.preset) {
+    const preset = presetSelect.options[presetSelect.selectedIndex]?.text;
+
+    //ToDo: Handle cases when the preset was deleted or renamed
+
+    if (preset !== model.preset) {
         switchPreset(model.preset);
 
         // This will probably maybe eventually work most of the time.
@@ -343,7 +348,9 @@ function sendMessage(event) {
             sleep(100).then(() => sendButton.dispatchEvent(new Event('click')));
         });
     } else {
-        switchOpenRouterModel(model.modelName);
+        if (openRouterModelSelect.value !== model.modelName) {
+            switchOpenRouterModel(model.modelName);
+        }
 
         sleep(100).then(() => sendButton.dispatchEvent(new Event('click')));
     }
