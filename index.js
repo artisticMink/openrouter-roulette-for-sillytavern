@@ -275,28 +275,6 @@ async function getTemplate(templateName) {
 }
 
 /**
- * Fisher-Yates Shuffle Algorithm.
- *
- * @param {Array} array
- * @return {Array}
- */
-function fisherYatesShuffle(array) {
-    let counter = array.length;
-
-    while (counter > 0) {
-        let index = Math.floor(Math.random() * counter);
-
-        counter--;
-
-        let temp = array[counter];
-        array[counter] = array[index];
-        array[index] = temp;
-    }
-
-    return array;
-}
-
-/**
  * Chooses a model based on their probabilities.
  *
  * @param {Array} modelSelection - An array of model objects.
@@ -305,7 +283,6 @@ function fisherYatesShuffle(array) {
  */
 function chooseModel(modelSelection) {
     let models = structuredClone(modelSelection);
-    // models = fisherYatesShuffle(models);
 
     let cumulativeProbability = 0;
     const thresholds = models.map(model => {
