@@ -96,6 +96,7 @@
     padding: 0;
     margin-right: 1em;
     vertical-align: middle;
+    cursor: pointer;
 }
 
 #openrouter-roulette-container label[for="openrouter-roulette-settings-useOnEnter"] {

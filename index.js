@@ -24,6 +24,8 @@ const defaultSettings = {
 loadSettings();
 let extensionSettings = extension_settings[extensionName];
 
+let openRouterRouletteLoaded = false;
+
 // 'Extensions' container on the sidebar
 const sidebar = getDomElement('ai_response_configuration');
 const extensionContainerIdentifier = 'ai_response_configuration_extensions';
@@ -417,6 +419,8 @@ async function loadExtension() {
 
     updateUseOnEnterToggle();
     await updateModelList();
+
+    openRouterRouletteLoaded = true;
 }
 
 /**
@@ -428,10 +432,12 @@ async function loadExtension() {
 function unloadExtension() {
     extensionContainer.querySelector('#openrouter-roulette-container').remove();
     eventSource.removeListener(event_types.CHAT_CHANGED, swapSettingsSourceHandle);
-    sendTextArea.removeListener('keydown', sendTextareaKeydownHandle);
+    sendTextArea.removeEventListener('keydown', sendTextareaKeydownHandle);
     randomizedSendButton.remove();
+
     randomizedSendButton = null;
     sendButton = null;
+    openRouterRouletteLoaded = false;
 }
 
 /**
@@ -440,7 +446,15 @@ function unloadExtension() {
  * @returns {boolean}
  */
 function isOpenRouter() {
-    return getDomElement('chat_completion_source').value === 'openrouter';
+    return getDomElement('main_api').value === 'openai' && getDomElement('chat_completion_source').value === 'openrouter';
+}
+
+async function toggleExtension() {
+    if (isOpenRouter() && !openRouterRouletteLoaded) {
+        await loadExtension();
+    } else if (openRouterRouletteLoaded) {
+        await unloadExtension();
+    }
 }
 
 /**
@@ -448,9 +462,7 @@ function isOpenRouter() {
  */
 (async function () {
     if (isOpenRouter()) await loadExtension();
-    getDomElement('chat_completion_source')
-        .addEventListener('change', async (event) => {
-            if (isOpenRouter()) await loadExtension();
-            else await unloadExtension();
-        });
+
+    getDomElement('main_api').addEventListener('change', toggleExtension);
+    getDomElement('chat_completion_source').addEventListener('change', toggleExtension);
 })();
